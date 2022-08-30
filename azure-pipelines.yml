@@ -17,5 +17,16 @@ steps:
 
 - script: |
     npm install
-    npm run build
-  displayName: 'npm install and build'
+  displayName: 'npm install'
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    customCommand: 'run test'
+  continueOnError: true
+  
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/results-*.xml'
+    searchFolder: '$(System.DefaultWorkingDirectory)/_Testing/cypress/reports/junit'
+    mergeTestResults: true
